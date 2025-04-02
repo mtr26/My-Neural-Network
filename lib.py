@@ -1,6 +1,9 @@
 import numpy as np
 
 class Layer:
+    """
+    Base class for all layers.
+    """
     def __init__(self):
         self.forward
 
@@ -12,6 +15,9 @@ class Layer:
 
 
 class NN:
+    """
+    Base class for all neural networks.
+    """
     def __init__(self):
         pass
 
@@ -32,12 +38,21 @@ class NN:
 
 
 def sigmoid(x):
+    """
+    Sigmoid activation function.
+    """
     return 1 / (1 + np.exp(-x))
 
 def __sigmoid__derivitive__(x):
+    """
+    Derivative of the sigmoid activation function.
+    """
     return sigmoid(x) * (1 - sigmoid(x))
 
 def mean_square_error(output, expected_output):
+    """
+    Mean square error loss function
+    """
     loss = np.mean((output - expected_output) ** 2)
     grad = 2 * (output - expected_output) / output.size
     return loss, grad
@@ -47,7 +62,7 @@ def mean_square_error(output, expected_output):
 ACTIVATION_FUNC = {
     'linear' : (lambda x : x),
     'sigmoid' : sigmoid,
-    'tanh' : ...,
+    'tanh' : ..., 
     'ReLu' : ...
 }
 

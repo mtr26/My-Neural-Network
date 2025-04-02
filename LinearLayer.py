@@ -3,7 +3,10 @@ import lib
 
 
 class Linear(lib.Layer):
-    def __init__(self, input_dim, output_dim, activation='linear'):
+    """
+    Linear layer.
+    """
+    def __init__(self, input_dim : int, output_dim : int, activation : str ='linear'):
         assert activation in lib.ACTIVATION_FUNC.keys()
         self.input_dim = input_dim
         self.out_dim = output_dim
@@ -16,6 +19,9 @@ class Linear(lib.Layer):
         self.activation = activation
 
     def backward(self, grad_output, lr):
+        """
+        Compute the gradient of the loss with respect to the input of the layer.
+        """
         # Compute gradient of the loss with respect to the linear combination (z)
         grad_z = grad_output * lib.ACTIVATION_FUNC_DERIVITIVE[self.activation](self.last_z)
         
@@ -35,32 +41,16 @@ class Linear(lib.Layer):
         return self.gradient_cache
 
     def params_nbr(self):
+        """
+        Return the number of parameters of the layer.
+        """
         return self.input_dim * self.out_dim + self.out_dim
 
     def forward(self, x):
+        """
+        Compute the output of the layer
+        """
         self.last_input = x  # x: (batch_size, input_dim)
         self.last_z = x @ self.weight + self.biases.T  # Align dimensions
         self.last_output = lib.ACTIVATION_FUNC[self.activation](self.last_z)
         return self.last_output
-
-
-"""
-
-# Input and output data
-x = np.array([1, 2, 3, 4]).reshape(1, -1)  # Shape (1, 4)
-y = np.array([1, 2, 3, 4]).reshape(1, -1)  # Shape (1, 4)
-
-# Create a Linear Layer with no activation
-layer = Linear(4, 4, activation='linear')
-
-# Training loop
-for epoch in range(200):
-    out = layer.forward(x)
-    loss, grad = lib.mean_square_error(out, y)
-    layer.backward(grad, 1e-3)
-    if epoch % 10 == 0:
-        print(f"Epoch {epoch + 1}, Loss: {loss:.4f}")
-
-# Final output
-print("Final output:", layer.forward(np.array([2, 4, 6, 8]).reshape(1, -1)))
-"""
